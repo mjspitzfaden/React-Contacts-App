@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import AppBar from 'material-ui/AppBar';
-
+import {clicked} from './actions';
 import uid from 'uid'
 import {Card, CardActions, CardTitle, CardText} from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -9,7 +9,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
-import database, {User} from './database';
+import database from './database';
 
 import {Link} from 'react-router-dom';
 
@@ -22,19 +22,24 @@ class MyListComponent extends Component {
 
     this.state = {
       key: '', name: 'NONE', address: 'NONE', city: 'lafayette', email:'', phoneNumber: 'number', state:'La', zip:'70501',
-      contacts: []
     };
-  }
 
+  }
 
 
   showInfo(event, key) {
     let personIndex = this.props.contacts.findIndex((contact)=>{
       if (contact.key === key) {return contact}
     })
-    let tempState = this.props.contacts
-    tempState[personIndex].clicked = !tempState[personIndex].clicked
-    this.setState({contacts: tempState})
+    // dispatch clicked:
+    //store.dispatch(clicked(personIndex, this.porps.contact));
+    this.props.onClick(personIndex);
+
+
+
+    //let tempState = this.props.contacts
+    //tempState[personIndex].clicked = !tempState[personIndex].clicked
+    //this.setState({contacts: tempState})
   }
 
 render() {
@@ -66,10 +71,19 @@ render() {
 
 function mapStateToProps (state) {
   return {
-    contacts: state.contacts
+    contacts: state.contacts,
+    user: state.user
   }
 }
 
-var MyList = connect(mapStateToProps)(MyListComponent);
+function mapDispatchToProps (dispatch) {
+  return {
+    onClick: function (data) {
+      dispatch(clicked(data));
+    }
+  }
+}
+
+var MyList = connect(mapStateToProps, mapDispatchToProps)(MyListComponent);
 
 export default MyList;

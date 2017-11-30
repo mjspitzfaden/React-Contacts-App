@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import * as firebase from "firebase";
 // import logo from './logo.svg';
 import './App.css';
+import {loggedIn} from './actions.js';
 import AppBar from 'material-ui/AppBar';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import {red700} from 'material-ui/styles/colors';
-
+import { connect } from 'react-redux';
 import {BrowserRouter, Route, Link, Switch, Redirect}
   from 'react-router-dom';
 
@@ -58,7 +59,7 @@ class Article extends Component {
 //   </div>
 // )
 
-class App extends Component {
+class Nav extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -70,7 +71,7 @@ class App extends Component {
     auth()
       .then((user) => {
         console.log(user);
-        this.setState({logged_in: true});
+        //this.setState({logged_in: true});
       })
       .catch(function (e) {
         console.log(e);
@@ -80,8 +81,8 @@ class App extends Component {
 log_out(){
   firebase.auth().signOut().then(() => {
     console.log("log out sucessfull");
-    let tempstate = !this.state.logged_in;
-    this.setState({logged_in: tempstate});
+    //let tempstate = !this.state.logged_in;
+    //this.setState({logged_in: tempstate});
   }).catch(function(error) {
     console.log("log out failed", error);
   });
@@ -90,7 +91,7 @@ log_out(){
 
 
   auth_button () {
-    if (this.state.logged_in) {
+    if (this.props.user.uid) {
       return <button onClick={() => this.log_out()}>Logout</button>
     }
 
@@ -99,16 +100,42 @@ log_out(){
 
   render() {
     return (
+      <ul>
+        <li><Link to="/">List</Link></li>
+        <li><Link to="/add">Add Form</Link></li>
+        <li>{this.auth_button()}</li>
+      </ul>
+    )
+  }
+}
+
+function mapStateToProps (state) {
+  return {
+    user: state.user
+  }
+}
+
+function mapDispatchToProps (dispatch) {
+  return {
+    onClick: function (data) {
+      dispatch(loggedIn(data));
+    }
+  }
+}
+
+var NavConnected = connect(mapStateToProps, mapDispatchToProps)(Nav);
+
+class MyAppComponent extends Component {
+
+
+  render() {
+    return (
       <Provider store={store}>
         <MuiThemeProvider muiTheme={theme}>
           <BrowserRouter>
             <div>
-              <AppBar title="Hello Class"/>
-              <ul>
-                <li><Link to="/">List</Link></li>
-                <li><Link to="/add">Add Form</Link></li>
-                <li>{this.auth_button()}</li>
-              </ul>
+              <AppBar title="Contacts Application"/>
+              <NavConnected/>
 
               <Switch>
                 <Route exact path="/" component={MyList}/>
@@ -126,4 +153,5 @@ log_out(){
   }
 }
 
-export default App;
+
+export default MyAppComponent;

@@ -1,4 +1,11 @@
 
+export function initContact (data) {
+  return {
+    type: 'INIT_CONTACT',
+    data: data
+  }
+}
+
 export function addContact (data) {
   return {
     type: 'ADD_CONTACT',
@@ -14,6 +21,13 @@ export function updateContact (index, data) {
   }
 }
 
+export function clicked (index) {
+  return {
+    type: 'CLICKED',
+    index: index
+  }
+}
+
 export function deleteAttr (index) {
   return {
     type: 'DELETE_ATTR',
@@ -25,5 +39,18 @@ export function loggedIn (user) {
   return {
     type: 'LOGGED_IN',
     user: user
+  }
+}
+
+export function loggedOut (user) {
+  return {
+    type: 'LOGGED_OUT',
+    user: user
+  }
+}
+
+export function retrieved () {
+  return {
+    type: 'RETRIEVED'
   }
 }
