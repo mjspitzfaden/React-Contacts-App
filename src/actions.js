@@ -42,10 +42,15 @@ export function loggedIn (user) {
   }
 }
 
-export function loggedOut (user) {
+export function loggedOut () {
   return {
-    type: 'LOGGED_OUT',
-    user: user
+    type: 'LOGGED_OUT'
+  }
+}
+
+export function removeUser () {
+  return {
+    type: 'REMOVE_USER'
   }
 }
 

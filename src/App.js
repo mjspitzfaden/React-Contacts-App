@@ -14,6 +14,7 @@ import {BrowserRouter, Route, Link, Switch, Redirect}
 import { Provider } from 'react-redux';
 
 import MyForm from './myform';
+import {loggedOut, removeUser} from './actions';
 import MyList from './list';
 import MyDelete from './delete';
 import { auth } from './database';
@@ -62,9 +63,6 @@ class Article extends Component {
 class Nav extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      logged_in: false
-    }
   }
 
   login () {
@@ -83,6 +81,7 @@ log_out(){
     console.log("log out sucessfull");
     //let tempstate = !this.state.logged_in;
     //this.setState({logged_in: tempstate});
+    this.props.logout();
   }).catch(function(error) {
     console.log("log out failed", error);
   });
@@ -119,6 +118,10 @@ function mapDispatchToProps (dispatch) {
   return {
     onClick: function (data) {
       dispatch(loggedIn(data));
+    },
+    logout: function () {
+      dispatch(loggedOut());
+      dispatch(removeUser());
     }
   }
 }

@@ -77,6 +77,23 @@
           // 3. return new state
           return new_state;
 
+          case 'LOGGED_OUT':
+          // 1. Copy the sate
+          // let new_state = Object.assign({}, state, {contacts: []});
+          // state.contacts.forEach((old, index) => {
+          //   let new_contact = Object.assign({}, old);
+          //   new_state.contacts.push(new_contact);
+          // });
+
+            var new_state = [...state];
+
+          // 2. Modify new state
+            //new_state.logged_in.clicked = !new_state.logged_in.clicked;
+            console.log(new_state);
+
+          // 3. return new state
+          return new_state;
+
           default:
             return state;
         }
@@ -96,6 +113,8 @@
         switch (action.type) {
           case 'LOGGED_IN':
             return action.user;
+          case 'REMOVE_USER':
+            return {}
           default:
             return state
         }
